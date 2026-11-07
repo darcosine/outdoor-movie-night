@@ -1,0 +1,10 @@
+﻿{
+  "name": "outdoor-movie-night",
+  "private": true,
+  "scripts": {
+    "css": "tailwindcss -i ./static_src/input.css -o ./static/css/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

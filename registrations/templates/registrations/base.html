@@ -1,0 +1,23 @@
+﻿{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102234"><meta name="description" content="Register for an unforgettable outdoor movie night on campus.">
+  <title>{% block title %}{{ event.title }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}"><link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="site-shell">
+  <div class="backdrop" aria-hidden="true"></div><div class="backdrop-shade" aria-hidden="true"></div>
+  <header class="topbar"><a class="brand" href="{% url 'registrations:home' %}" aria-label="Outdoor Movie Night home"><span class="brand-mark">✦</span><span>Campus<span class="brand-light">Cinema</span></span></a>
+    <nav class="top-nav" aria-label="Main navigation"><a href="{% url 'registrations:home' %}#event">The event</a><a href="{% url 'registrations:home' %}#register">Register</a><a class="nav-pill" href="{% url 'registrations:home' %}#register">Save my seat <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main class="page-content">{% if messages %}<div class="flash-stack">{% for message in messages %}<div class="flash {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
+  <footer class="site-footer"><span>Made for a night under the stars.</span><span>Questions? <a href="mailto:{{ event.contact_email }}">Contact the organisers</a></span></footer>
+  {% block scripts %}{% endblock %}
+</body></html>
+
+

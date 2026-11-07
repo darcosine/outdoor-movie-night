@@ -1,0 +1,1 @@
+﻿{% if not valid_length %}<p class="field-error">Registration number must be exactly 10 characters.</p>{% elif not valid_format %}<p class="field-error">Use letters and numbers only.</p>{% elif taken %}<p class="field-error">This number already has a registration.</p>{% else %}<p class="field-success">Looks good. You can continue.</p>{% endif %}
