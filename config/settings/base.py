@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "config.middleware.ContentSecurityPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -72,7 +73,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -89,7 +93,7 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
@@ -105,21 +109,22 @@ CACHES = {
 }
 
 SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 8 * 60 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
 
-# Money. Registration.amount_due is rupees. Payment.amount is paise (PhonePe).
-PAY_RUPEES = 500
-PAY_PAISE = 50000
-RESERVE_RUPEES = 600
-DOOR_SURCHARGE_RUPEES = 100
+# Reservation amount in rupees.
+RESERVATION_RUPEES = 500
+ONSPOT_RUPEES = 600
 
 EVENT = {
     "title": "Outdoor Movie Night",
@@ -132,23 +137,6 @@ EVENT = {
 }
 EVENT_DATE = date.fromisoformat(EVENT["date"])
 
-PHONEPE_MERCHANT_ID = env("PHONEPE_MERCHANT_ID", default="")
-PHONEPE_SALT_KEY = env("PHONEPE_SALT_KEY", default="")
-PHONEPE_SALT_INDEX = env("PHONEPE_SALT_INDEX", default="1")
-PHONEPE_BASE_URL = env(
-    "PHONEPE_BASE_URL",
-    default="https://api-preprod.phonepe.com/apis/pg-sandbox",
-)
-PHONEPE_REDIRECT_URL = env(
-    "PHONEPE_REDIRECT_URL",
-    default="http://127.0.0.1:8000/payments/return/",
-)
-PHONEPE_CALLBACK_URL = env(
-    "PHONEPE_CALLBACK_URL",
-    default="http://127.0.0.1:8000/payments/callback/",
-)
-PHONEPE_MOCK = env.bool("PHONEPE_MOCK", default=True)
-
 CLOUDINARY_URL = env("CLOUDINARY_URL", default="")
 AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default="")
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")
@@ -156,11 +144,6 @@ AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default="")
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
 AWS_S3_PUBLIC_URL = env("AWS_S3_PUBLIC_URL", default="")
 AWS_S3_REGION = env("AWS_S3_REGION", default="auto")
-
-ID_CARD_MAX_BYTES = 5 * 1024 * 1024
-ID_CARD_MIN_WIDTH = 480
-ID_CARD_MIN_HEIGHT = 300
-ID_CARD_MAX_EDGE = 8000
 
 ALLOW_LOCAL_MEDIA = False
 

@@ -1,9 +1,7 @@
-﻿import re
+import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-
-from registrations.services.images import validate_id_card
 
 _REG_NUMBER = re.compile(r"[A-Z0-9]{10}")
 
@@ -36,14 +34,6 @@ class RegistrationForm(forms.Form):
             "placeholder": "10-digit mobile number", "required": True,
         }),
     )
-    id_card = forms.FileField(
-        label="Student ID card",
-        widget=forms.FileInput(attrs={
-            "class": "mt-2 block w-full text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white",
-            "accept": "image/jpeg,image/png,image/webp", "capture": "environment",
-            "required": True,
-        }),
-    )
 
     def clean_name(self):
         name = " ".join(self.cleaned_data["name"].split())
@@ -70,6 +60,3 @@ class RegistrationForm(forms.Form):
         if not re.fullmatch(r"[6-9]\d{9}", raw):
             raise ValidationError("Enter a valid Indian mobile number.")
         return "+91" + raw
-
-    def clean_id_card(self):
-        return validate_id_card(self.cleaned_data["id_card"])

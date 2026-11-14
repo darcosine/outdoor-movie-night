@@ -9,7 +9,7 @@ admin.site.index_title = "Registrations"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("manage/", include("dashboard.urls")),
+    path("crew-console-7x4q/", include("dashboard.urls")),
     path("", include("registrations.urls")),
 ]
 

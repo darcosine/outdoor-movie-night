@@ -1,1 +1,34 @@
-﻿<div class="table-wrap"><table class="data-table"><thead><tr><th>STUDENT</th><th>REGISTRATION NO.</th><th>STATUS</th><th>PAID / DUE</th><th>PHONE</th><th>REGISTERED</th><th>ACTIONS</th></tr></thead><tbody>{% for row in registrations %}<tr><td>{{ row.name }}</td><td>{{ row.reg_number }}</td><td><span class="badge badge-{{ row.status|lower }}">{{ row.get_status_display }}</span></td><td>{{ row.money_label }}</td><td>{{ row.phone }}</td><td>{{ row.created_at|date:'d M Y, H:i' }}</td><td><div class="row-actions">{% if can_mark_paid %}{% if row.status == 'RESERVED' or row.status == 'PENDING_PAYMENT' or row.status == 'FAILED' %}<form method="post" action="{% url 'dashboard:mark_paid' row.pk %}">{% csrf_token %}<button class="primary-button" type="submit">{% if row.status == 'RESERVED' %}Mark ₹600 paid{% else %}Confirm ₹500 received{% endif %}</button></form>{% endif %}{% endif %}<form method="post" action="{% url 'dashboard:remove' row.pk %}" onsubmit="return confirm('Remove this student and their payment records? This cannot be undone.');">{% csrf_token %}<button class="remove-button" type="submit">Remove</button></form></div></td></tr>{% empty %}<tr><td colspan="7">No registrations match this search.</td></tr>{% endfor %}</tbody></table></div>
+<div class="table-wrap">
+  <table class="data-table">
+    <thead><tr><th>STUDENT</th><th>REGISTRATION NO.</th><th>STATUS</th><th>RESERVATION</th><th>PHONE</th><th>REGISTERED</th><th>ACTIONS</th></tr></thead>
+    <tbody>
+      {% for row in registrations %}
+      <tr>
+        <td>{{ row.name }}</td><td>{{ row.reg_number }}</td>
+        <td><span class="badge badge-{{ row.status|lower }}">{{ row.get_status_display }}</span></td>
+        <td>{% if row.status == 'PAID' %}₹{{ row.amount_paid }} paid{% else %}₹{{ row.amount_due }} due{% endif %}</td>
+        <td>{{ row.phone }}</td><td>{{ row.created_at|date:'d M Y, H:i' }}</td>
+        <td>
+          <div class="row-actions">
+            {% if row.status != 'PAID' %}
+            <form method="post" action="{% url 'dashboard:mark_paid' row.pk %}" class="mark-paid-form">
+              {% csrf_token %}
+              <button class="primary-button paid-button js-open-paid-dialog" type="button">Mark paid</button>
+              <dialog class="paid-dialog" aria-labelledby="paid-dialog-title-{{ row.pk }}">
+                <div class="paid-dialog-heading"><span class="paid-dialog-icon" aria-hidden="true">₹</span><div><h2 id="paid-dialog-title-{{ row.pk }}">Confirm payment amount</h2><p>Was this payment made on-spot?</p></div></div>
+                <div class="paid-dialog-actions">
+                  <button class="paid-choice-button paid-choice-standard" type="submit" name="amount_paid" value="{{ reservation_rupees }}"><span><strong>Not on-spot</strong><small>Regular payment</small></span><b>₹{{ reservation_rupees }}</b></button>
+                  <button class="paid-choice-button paid-choice-onsite" type="submit" name="amount_paid" value="{{ onspot_rupees }}"><span><strong>On-spot</strong><small>Paid at the event</small></span><b>₹{{ onspot_rupees }}</b></button>
+                  <button class="paid-dialog-cancel js-close-paid-dialog" type="button">Cancel</button>
+                </div>
+              </dialog>
+            </form>
+            {% else %}<span class="paid-label">Paid</span>{% endif %}
+            <form method="post" action="{% url 'dashboard:remove' row.pk %}" onsubmit="return confirm('Remove this student registration? This cannot be undone.');">{% csrf_token %}<button class="remove-button" type="submit">Remove</button></form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="7">No registrations match this search.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>

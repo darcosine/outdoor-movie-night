@@ -1,5 +1,5 @@
-﻿{% extends 'registrations/base.html' %}
-{% block title %}{{ event.title }} · Campus Cinema{% endblock %}
+{% extends 'registrations/base.html' %}
+{% block title %}{{ event.title }} · Outdoor Movie Night{% endblock %}
 {% block content %}
 <section class="hero-layout" id="event">
   <div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> A CAMPUS NIGHT TO REMEMBER</div><h1>Big screen.<br><span>Open sky.</span></h1><p class="hero-lead">Leave the lecture halls behind. Bring your friends, find a patch of grass, and let the night roll.</p>
@@ -11,19 +11,15 @@
     <div class="card-topline"><span class="step-label"><span class="step-number">01</span> YOUR TICKET</span><span class="secure-label"><span aria-hidden="true">◈</span> STUDENTS ONLY</span></div>
     <h2 id="register-title">Save your seat</h2><p class="card-intro">Enter your details exactly as they appear on your student ID.</p>
     {% if form.non_field_errors %}<div class="form-alert" role="alert">{{ form.non_field_errors }}</div>{% endif %}
-    <form method="post" enctype="multipart/form-data" class="registration-form" novalidate>
+    <form method="post" class="registration-form" novalidate>
       {% csrf_token %}
       <div class="field"><label for="{{ form.name.id_for_label }}">Full name</label>{{ form.name }}{% for e in form.name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
       <div class="field"><label for="{{ form.reg_number.id_for_label }}">Student registration number</label>{{ form.reg_number }}<p class="field-help reg-number-help">Exactly 10 letters or numbers.</p><div id="reg-hint" aria-live="polite"></div>{% for e in form.reg_number.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
       <div class="field"><label for="{{ form.phone.id_for_label }}">Mobile number</label>{{ form.phone }}{% for e in form.phone.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
-      <div class="field upload-field"><label for="{{ form.id_card.id_for_label }}">Student ID card photo</label><p class="field-help">A clear, well-lit photo · JPEG, PNG or WebP · up to 5 MB</p><div class="upload-control">{{ form.id_card }}</div>{% for e in form.id_card.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
-      <div class="price-options"><button class="pay-option" type="submit" name="choice" value="pay"><span class="option-copy"><strong>Pay now</strong><small>Fast entry · pay online</small></span><span class="option-price">₹500 <span>↗</span></span></button><button class="reserve-option" type="submit" name="choice" value="reserve"><span class="option-copy"><strong>Reserve a seat</strong><small>Pay at the venue · ₹100 extra</small></span><span class="option-price">₹600 <span>→</span></span></button></div>
-      <p class="privacy-note"><span aria-hidden="true">▣</span> Your student ID is used only to verify your registration.</p>
+      <div class="price-options"><button class="reserve-option" type="submit"><span class="option-copy"><strong>Reserve a seat</strong><small>Reservation price · ₹{{ reservation_rupees }}</small></span><span class="option-price">₹{{ reservation_rupees }} <span>→</span></span></button></div>
+      <div class="fee-notices" role="note"><p>On spot payments will be 600rs per person</p><p>Contact the coodinator: +918639189607 to pay your due fee.</p></div>
     </form>
   </section>
 </section>
 <section class="event-strip"><div><span class="strip-kicker">GATES OPEN</span><strong>{{ event.gates }}</strong></div><div class="strip-divider"></div><div><span class="strip-kicker">MOVIE STARTS</span><strong>{{ event.screening }}</strong></div><div class="strip-spacer"></div><span class="bring-note">Bring a blanket. We'll bring the popcorn.</span></section>
 {% endblock %}
-{% block scripts %}<script>document.addEventListener('change',function(e){if(e.target.matches('input[type=file]')){const label=e.target.closest('.upload-control'); if(label&&e.target.files[0]) label.dataset.filename=e.target.files[0].name;}});</script>{% endblock %}
-
-

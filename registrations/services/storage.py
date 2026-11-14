@@ -59,10 +59,6 @@ def _store_image(content, folder_name: str) -> str:
     )
 
 
-def store_id_card(content) -> str:
-    return _store_image(content, "id-cards")
-
-
 def store_poster(content) -> str:
     return _store_image(content, "posters")
 
@@ -133,10 +129,6 @@ def _delete_image(image_url: str, folder_name: str) -> None:
         return
 
     raise ImproperlyConfigured("No configured image storage is available for deletion.")
-
-
-def delete_id_card(image_url: str) -> None:
-    _delete_image(image_url, "id-cards")
 
 
 def delete_poster(image_url: str) -> None:

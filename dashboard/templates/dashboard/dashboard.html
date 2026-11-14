@@ -1,4 +1,33 @@
-﻿{% extends 'registrations/base.html' %}{% block title %}Manage registrations · Campus Cinema{% endblock %}{% block content %}<div class="dashboard-shell"><div class="dashboard-content"><div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><div><div class="eyebrow">EVENT STAFF</div><h1 class="dashboard-title">Registrations</h1><p class="dashboard-note">Manual payment updates close before {{ event.when }}.</p></div><a class="secondary-button" style="width:auto;padding:10px 14px" href="{% url 'dashboard:movie' %}">Edit featured movie</a><form method="post" action="{% url 'dashboard:logout' %}">{% csrf_token %}<button class="secondary-button" type="submit">Sign out</button></form></div><div class="stats-grid"><div class="stat-card"><small>TOTAL</small><strong>{{ total }}</strong></div><div class="stat-card"><small>PAID</small><strong>{{ paid }}</strong></div><div class="stat-card"><small>RESERVED · PAY AT VENUE</small><strong>{{ reserved }}</strong></div><div class="stat-card"><small>PENDING PAYMENT</small><strong>{{ pending }}</strong></div><div class="stat-card"><small>EXPECTED REVENUE</small><strong>₹{{ expected_revenue }}</strong></div></div><form class="filter-row" method="get" hx-get="{% url 'dashboard:home' %}" hx-target="#registration-table" hx-push-url="true"><input type="search" name="q" value="{{ q }}" placeholder="Search name or registration no."><select name="status"><option value="">All statuses</option>{% for key,label in statuses %}<option value="{{ key }}" {% if status == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><button class="primary-button" style="width:auto;padding:10px 16px" type="submit">Filter</button><a class="secondary-button" style="width:auto;padding:10px 16px" href="{% url 'dashboard:export' %}?q={{ q|urlencode }}&status={{ status|urlencode }}">Export CSV</a></form><div id="registration-table">{% include 'dashboard/_table.html' %}</div></div></div>{% endblock %}
-
-
-
+{% extends 'registrations/base.html' %}
+{% block title %}Manage registrations · Outdoor Movie Night{% endblock %}
+{% block content %}
+<div class="dashboard-shell">
+  <div class="dashboard-content">
+    <header class="dashboard-header">
+      <div class="dashboard-heading">
+        <div class="eyebrow">EVENT STAFF</div>
+        <h1 class="dashboard-title">Registrations</h1>
+        <p class="dashboard-note">Seat reservations · ₹{{ reservation_rupees }} per person</p>
+      </div>
+      <div class="dashboard-actions">
+        <a class="secondary-button" href="{% url 'dashboard:movie' %}">Edit featured movie</a>
+        <form method="post" action="{% url 'dashboard:logout' %}">{% csrf_token %}<button class="secondary-button" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="stats-grid">
+      <div class="stat-card"><small>TOTAL</small><strong>{{ total }}</strong></div>
+      <div class="stat-card"><small>RESERVED</small><strong>{{ reserved }}</strong></div>
+      <div class="stat-card"><small>PAID</small><strong>{{ paid }}</strong></div>
+      <div class="stat-card"><small>RESERVATION VALUE</small><strong>₹{{ reservation_value }}</strong></div>
+      <div class="stat-card"><small>ACTUAL VALUE</small><strong>₹{{ actual_value }}</strong></div>
+    </div>
+    <form class="filter-row" method="get" hx-get="{% url 'dashboard:home' %}" hx-target="#registration-table" hx-push-url="true">
+      <input type="search" name="q" value="{{ q }}" placeholder="Search name or registration no.">
+      <select name="status"><option value="">All statuses</option>{% for key,label in statuses %}<option value="{{ key }}" {% if status == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+      <button class="primary-button" type="submit">Filter</button>
+      <a class="secondary-button" href="{% url 'dashboard:export' %}?q={{ q|urlencode }}&status={{ status|urlencode }}">Export CSV</a>
+    </form>
+    <div id="registration-table">{% include 'dashboard/_table.html' %}</div>
+  </div>
+</div>
+{% endblock %}

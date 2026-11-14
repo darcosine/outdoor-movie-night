@@ -7,3 +7,4 @@ venv/
 .idea/
 staticfiles/
 media/
+node_modules/htmx.org/

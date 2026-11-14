@@ -14,12 +14,6 @@ ALLOWED_HOSTS = env.list(  # noqa: F405
 if "testserver" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append("testserver")
 
-PHONEPE_MOCK = env.bool("PHONEPE_MOCK", default=True)  # noqa: F405
-if not PHONEPE_MERCHANT_ID:  # noqa: F405
-    PHONEPE_MERCHANT_ID = "MOCKMERCHANT"
-if not PHONEPE_SALT_KEY:  # noqa: F405
-    PHONEPE_SALT_KEY = "mock-salt-not-for-production"
-
 ALLOW_LOCAL_MEDIA = True
 
 STORAGES = {
